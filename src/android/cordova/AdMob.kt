@@ -32,8 +32,8 @@ class AdMob : CordovaPlugin() {
     lateinit var context: CallbackContext
     private var readyCallbackContext: CallbackContext? = null
     private var sdkReady = false
+    private var adapters: String = "loading...";
     private val eventQueue: ArrayList<PluginResult> = arrayListOf()
-    private val adapters: ArrayList<String>? = null;
 
     private val actions = mapOf(
         Actions.READY to ::executeReady,
@@ -88,7 +88,7 @@ class AdMob : CordovaPlugin() {
         }
         MobileAds.initialize(ctx.activity) { result ->
             configForTestLabIfNeeded(ctx.activity)
-            adapters = arrayListOf(result.adapterStatusMap.map {it.key})
+            adapters = result.adapterStatusMap.map{it.key}.joinToString()
             ctx.resolve(mapOf("version" to MobileAds.getVersion(), "adapters" to adapters))
         }
         sdkReady = true
